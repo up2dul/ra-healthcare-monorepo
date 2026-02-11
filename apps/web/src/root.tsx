@@ -10,8 +10,8 @@ import {
 import type { Route } from "./+types/root";
 
 import "./index.css";
-import Header from "./components/header";
-import { ThemeProvider } from "./components/theme-provider";
+import Header from "./components/layout/header";
+import { ThemeProvider } from "./components/layout/theme-provider";
 import { Toaster } from "./components/ui/sonner";
 
 export const links: Route.LinksFunction = () => [
@@ -55,7 +55,10 @@ export default function App() {
     >
       <div className="grid h-svh grid-rows-[auto_1fr]">
         <Header />
-        <Outlet />
+
+        <main className="px-2 py-4 md:px-12 lg:px-44 xl:px-72 2xl:px-96">
+          <Outlet />
+        </main>
       </div>
       <Toaster richColors />
     </ThemeProvider>
