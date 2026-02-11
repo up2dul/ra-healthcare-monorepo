@@ -1,5 +1,5 @@
 import { GraphQLScalarType, Kind } from "graphql";
-
+import { GraphQLError } from "graphql/error";
 import { appointmentResolvers } from "./appointment";
 import { patientResolvers } from "./patient";
 import { workflowResolvers } from "./workflow";
@@ -11,13 +11,28 @@ const DateTimeScalar = new GraphQLScalarType({
     return value instanceof Date ? value.toISOString() : value;
   },
   parseValue(value) {
-    return new Date(value as string);
+    if (typeof value !== "string") {
+      throw new GraphQLError("DateTime value must be a string.");
+    }
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+      throw new GraphQLError(
+        "DateTime value must be a valid ISO-8601 date string.",
+      );
+    }
+    return date;
   },
   parseLiteral(ast) {
-    if (ast.kind === Kind.STRING) {
-      return new Date(ast.value);
+    if (ast.kind !== Kind.STRING) {
+      return null;
     }
-    return null;
+    const date = new Date(ast.value);
+    if (Number.isNaN(date.getTime())) {
+      throw new GraphQLError(
+        "DateTime value must be a valid ISO-8601 date string.",
+      );
+    }
+    return date;
   },
 });
 
