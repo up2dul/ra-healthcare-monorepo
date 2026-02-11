@@ -1,0 +1,3 @@
+{
+  "extends": "@ra-healthcare/config/tsconfig.base.json"
+}

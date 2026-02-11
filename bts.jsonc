@@ -1,0 +1,31 @@
+// Better-T-Stack
+//
+// Website: https://www.better-t-stack.dev/
+// Stack Builder: https://www.better-t-stack.dev/new
+// Analytics: https://www.better-t-stack.dev/analytics
+// Showcase: https://www.better-t-stack.dev/showcase
+// Sponsor: https://github.com/sponsors/AmanVarshney01
+//
+// Add new addons with: pnpm dlx create-better-t-stack add
+// This file is safe to delete
+
+{
+  "$schema": "https://r2.better-t-stack.dev/schema.json",
+  "version": "3.20.0",
+  "createdAt": "2026-02-11T04:13:55.010Z",
+  "reproducibleCommand": "pnpm create better-t-stack@latest ra-healthcare --frontend react-router --backend express --runtime node --database postgres --orm drizzle --api none --auth none --payments none --addons turborepo biome husky --examples none --db-setup none --web-deploy none --server-deploy none --no-git --package-manager pnpm --install",
+  "database": "postgres",
+  "orm": "drizzle",
+  "backend": "express",
+  "runtime": "node",
+  "frontend": ["react-router"],
+  "addons": ["turborepo", "biome", "husky"],
+  "examples": [],
+  "auth": "none",
+  "payments": "none",
+  "packageManager": "pnpm",
+  "dbSetup": "none",
+  "api": "none",
+  "webDeploy": "none",
+  "serverDeploy": "none",
+}

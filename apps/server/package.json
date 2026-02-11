@@ -1,0 +1,29 @@
+{
+  "name": "server",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsdown",
+    "check-types": "tsc -b",
+    "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.mjs"
+  },
+  "dependencies": {
+    "@ra-healthcare/db": "workspace:*",
+    "@ra-healthcare/env": "workspace:*",
+    "cors": "^2.8.5",
+    "dotenv": "catalog:",
+    "express": "^5.1.0",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@ra-healthcare/config": "workspace:*",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.13.14",
+    "tsdown": "^0.16.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5"
+  }
+}

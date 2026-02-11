@@ -1,0 +1,55 @@
+{
+  "name": "ra-healthcare",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+git@github.com:up2dul/ra-healthcare.git"
+  },
+  "author": {
+    "email": "up2dul@gmail.com",
+    "name": "Abdul"
+  },
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "check-types": "turbo check-types",
+    "dev:native": "turbo -F native dev",
+    "dev:web": "turbo -F web dev",
+    "dev:server": "turbo -F server dev",
+    "db:push": "turbo -F @ra-healthcare/db db:push",
+    "db:studio": "turbo -F @ra-healthcare/db db:studio",
+    "db:generate": "turbo -F @ra-healthcare/db db:generate",
+    "db:migrate": "turbo -F @ra-healthcare/db db:migrate",
+    "format": "biome format --write .",
+    "check": "biome check --write .",
+    "prepare": "husky",
+    "commitlint": "commitlint --edit"
+  },
+  "dependencies": {
+    "@ra-healthcare/env": "workspace:*",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.2.0",
+    "@commitlint/config-conventional": "^20.4.1",
+    "@ra-healthcare/config": "workspace:*",
+    "@types/node": "^22.13.14",
+    "commitlint": "^20.4.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
+    "turbo": "^2.6.3",
+    "typescript": "^5"
+  },
+  "lint-staged": {
+    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
+      "biome check --write ."
+    ]
+  },
+  "packageManager": "pnpm@10.18.3"
+}
