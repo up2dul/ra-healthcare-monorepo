@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/dialog";
 import { deletePatientMutation, patientQuery } from "@/graphql/patient";
 import { cn, formatDate, formatTime } from "@/lib/utils";
+import type { Route } from "./+types/_index";
 
 const STATUS_STYLES: Record<string, string> = {
   scheduled: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
@@ -39,6 +40,10 @@ const STATUS_STYLES: Record<string, string> = {
     "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
   cancelled: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
 };
+
+export function meta({}: Route.MetaArgs) {
+  return [{ title: "Patient Detail | RaHealthcare" }];
+}
 
 export default function PatientDetailPage() {
   const { id } = useParams<"id">();

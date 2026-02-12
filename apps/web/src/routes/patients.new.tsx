@@ -10,6 +10,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { createPatientMutation } from "@/graphql/patient";
 import { cn, fieldError } from "@/lib/utils";
 import { patientFormSchema } from "@/schemas/patient";
+import type { Route } from "./+types/_index";
+
+export function meta({}: Route.MetaArgs) {
+  return [{ title: "Add new Patient | RaHealthcare" }];
+}
 
 export default function NewPatientPage() {
   const navigate = useNavigate();

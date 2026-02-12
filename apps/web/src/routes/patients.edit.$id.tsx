@@ -11,6 +11,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { patientQuery, updatePatientMutation } from "@/graphql/patient";
 import { cn, fieldError } from "@/lib/utils";
 import { patientFormSchema } from "@/schemas/patient";
+import type { Route } from "./+types/_index";
+
+export function meta({}: Route.MetaArgs) {
+  return [{ title: "Edit Patient | RaHealthcare" }];
+}
 
 export default function EditPatientPage() {
   const { id } = useParams<"id">();
