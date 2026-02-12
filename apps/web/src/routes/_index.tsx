@@ -69,7 +69,12 @@ export default function PatientsPage() {
   return (
     <div className="space-y-4">
       <section className="flex items-center justify-between">
-        <h1 className="font-semibold text-lg">Patients</h1>
+        <div>
+          <h1 className="font-bold text-xl">Patients</h1>
+          <p className="text-muted-foreground text-sm">
+            Patients in the clinic.
+          </p>
+        </div>
         <ButtonLink to="/patients/new">
           <Plus data-icon="inline-start" />
           Add Patient

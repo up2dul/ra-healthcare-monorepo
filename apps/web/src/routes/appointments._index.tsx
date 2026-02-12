@@ -90,10 +90,15 @@ export default function AppointmentsPage() {
   return (
     <div className="space-y-6">
       <header className="flex items-center justify-between">
-        <h1 className="font-bold text-xl">Appointments</h1>
-        <ButtonLink to="/appointments/new" size="sm">
+        <div>
+          <h1 className="font-bold text-xl">Appointments</h1>
+          <p className="text-muted-foreground text-sm">
+            Clinic appointments schedule.
+          </p>
+        </div>
+        <ButtonLink to="/appointments/new">
           <Plus data-icon="inline-start" />
-          New Appointment
+          Add Appointment
         </ButtonLink>
       </header>
 

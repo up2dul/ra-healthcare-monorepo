@@ -105,7 +105,6 @@ export default function WorkflowPage() {
           </p>
         </div>
         <Button
-          size="sm"
           onClick={handleSave}
           disabled={!hasChanges || saveResult.fetching}
         >
