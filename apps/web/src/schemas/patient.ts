@@ -27,3 +27,5 @@ export const patientFormSchema = z.object({
     .min(5, "Please enter a complete address")
     .max(500, "Address is too long"),
 });
+
+export type PatientFormSchema = z.infer<typeof patientFormSchema>;

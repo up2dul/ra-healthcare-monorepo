@@ -8,6 +8,7 @@ import { PatientListSkeleton } from "@/components/patients/patient-skeleton";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { patientsQuery } from "@/graphql/patient";
 import { useDebounce } from "@/hooks/use-debounce";
+import type { PatientFormSchema } from "@/schemas/patient";
 import type { Route } from "./+types/_index";
 
 export function meta({}: Route.MetaArgs) {
@@ -21,6 +22,10 @@ export function meta({}: Route.MetaArgs) {
 }
 
 const PAGE_LIMIT = 10;
+
+interface Patient extends PatientFormSchema {
+  id: string;
+}
 
 export default function PatientsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -94,7 +99,7 @@ export default function PatientsPage() {
               </div>
             ) : (
               <ul className="grid gap-2">
-                {patients.data.map((patient) => (
+                {patients.data.map((patient: Patient) => (
                   <li key={patient.id}>
                     <Link to={`/patients/${patient.id}`}>
                       <PatientCard patient={patient} />
