@@ -84,3 +84,11 @@ export function toTimeString(iso: string): string {
   const m = String(d.getMinutes()).padStart(2, "0");
   return `${h}:${m}`;
 }
+
+/** Move an item in an array from one index to another, returning a new array. */
+export function arrayMove<T>(arr: T[], from: number, to: number): T[] {
+  const result = [...arr];
+  const [removed] = result.splice(from, 1);
+  result.splice(to, 0, removed);
+  return result;
+}
