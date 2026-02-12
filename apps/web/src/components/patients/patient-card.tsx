@@ -20,9 +20,11 @@ export default function PatientCard({ patient }: PatientCardProps) {
     <Card size="sm" className="transition-colors hover:bg-muted/50">
       <CardHeader>
         <div className="flex items-center gap-3">
-          <div className="flex size-8 items-center justify-center rounded-full bg-muted">
-            <User className="size-4 text-muted-foreground" />
-          </div>
+          <img
+            src={`https://api.dicebear.com/9.x/initials/svg?seed=${patient.name}`}
+            alt={patient.name}
+            className="size-8 rounded-full"
+          />
           <div className="min-w-0 flex-1">
             <CardTitle>{patient.name}</CardTitle>
             <CardDescription>

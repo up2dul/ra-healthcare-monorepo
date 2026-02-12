@@ -149,9 +149,11 @@ export default function PatientDetailPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-full bg-muted">
-              <User className="size-5 text-muted-foreground" />
-            </div>
+            <img
+              src={`https://api.dicebear.com/9.x/initials/svg?seed=${patient.name}`}
+              alt={patient.name}
+              className="size-10 rounded-full"
+            />
             <div>
               <CardTitle className="text-base">{patient.name}</CardTitle>
               <CardDescription className="capitalize">
