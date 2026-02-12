@@ -170,6 +170,8 @@ export default function NewPatientPage() {
                       value={field.state.value}
                       onChange={(val) => field.handleChange(val)}
                       onBlur={field.handleBlur}
+                      endMonth={new Date()}
+                      disabledDates={(d) => d > new Date()}
                       aria-invalid={
                         field.state.meta.isTouched && !field.state.meta.isValid
                       }
