@@ -27,6 +27,12 @@ interface DatePickerProps {
   onChange?: (value: string) => void;
   onBlur?: () => void;
   disabled?: boolean;
+  /** Earliest selectable month. Defaults to January 1900. */
+  startMonth?: Date;
+  /** Latest selectable month. Defaults to current month. */
+  endMonth?: Date;
+  /** Predicate to disable specific dates. Defaults to disabling future dates. */
+  disabledDates?: (date: Date) => boolean;
   "aria-invalid"?: boolean | "true" | "false";
   className?: string;
 }
@@ -38,6 +44,9 @@ function DatePicker({
   onChange,
   onBlur,
   disabled,
+  startMonth: startMonthProp,
+  endMonth: endMonthProp,
+  disabledDates,
   "aria-invalid": ariaInvalid,
   className,
 }: DatePickerProps) {
@@ -80,9 +89,9 @@ function DatePicker({
             onBlur?.();
           }}
           defaultMonth={date}
-          startMonth={new Date(1900, 0)}
-          endMonth={new Date()}
-          disabled={(d) => d > new Date()}
+          startMonth={startMonthProp ?? new Date(1900, 0)}
+          endMonth={endMonthProp}
+          disabled={disabledDates}
           autoFocus
         />
       </PopoverContent>
