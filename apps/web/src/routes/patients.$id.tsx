@@ -9,7 +9,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { useMutation, useQuery } from "urql";
 import { PatientDetailSkeleton } from "@/components/patients/patient-skeleton";
 import { Button, ButtonLink } from "@/components/ui/button";
@@ -193,30 +193,32 @@ export default function PatientDetailPage() {
                 status: string;
               }) => (
                 <li key={appt.id}>
-                  <Card size="sm">
-                    <CardHeader>
-                      <div className="flex items-center justify-between gap-2">
-                        <div className="min-w-0">
-                          <CardTitle>{appt.title}</CardTitle>
-                          <CardDescription className="flex items-center gap-1">
-                            <Clock className="size-3" />
-                            {formatDate(appt.startTime)}{" "}
-                            {formatTime(appt.startTime)} -{" "}
-                            {formatTime(appt.endTime)}
-                          </CardDescription>
+                  <Link to={`/appointments/${appt.id}`}>
+                    <Card size="sm">
+                      <CardHeader>
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="min-w-0">
+                            <CardTitle>{appt.title}</CardTitle>
+                            <CardDescription className="flex items-center gap-1">
+                              <Clock className="size-3" />
+                              {formatDate(appt.startTime)}{" "}
+                              {formatTime(appt.startTime)} -{" "}
+                              {formatTime(appt.endTime)}
+                            </CardDescription>
+                          </div>
+                          <span
+                            className={cn(
+                              "shrink-0 rounded-sm px-1.5 py-0.5 font-medium text-[10px] capitalize",
+                              STATUS_STYLES[appt.status] ??
+                                "bg-muted text-muted-foreground",
+                            )}
+                          >
+                            {appt.status}
+                          </span>
                         </div>
-                        <span
-                          className={cn(
-                            "shrink-0 rounded-sm px-1.5 py-0.5 font-medium text-[10px] capitalize",
-                            STATUS_STYLES[appt.status] ??
-                              "bg-muted text-muted-foreground",
-                          )}
-                        >
-                          {appt.status}
-                        </span>
-                      </div>
-                    </CardHeader>
-                  </Card>
+                      </CardHeader>
+                    </Card>
+                  </Link>
                 </li>
               ),
             )}
