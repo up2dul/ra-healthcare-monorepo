@@ -38,35 +38,29 @@ ENV VITE_SERVER_URL=$VITE_SERVER_URL
 
 RUN pnpm --filter web build
 
-# Create a standalone production bundle via pnpm deploy
-# This resolves workspace:* deps and installs only prod dependencies
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
-    pnpm --filter web deploy --prod /app/out
-
 # ---- Runner ----
-# Minimal production image
-FROM node:22-alpine AS runner
+# Serve static SPA with nginx — no Node.js needed at runtime
+FROM nginx:stable-alpine AS runner
 
-WORKDIR /app
+# SPA fallback: all routes serve index.html, let React Router handle routing
+RUN printf 'server {\n\
+    listen 4173;\n\
+    root /usr/share/nginx/html;\n\
+    index index.html;\n\
+\n\
+    location /assets/ {\n\
+        expires 1y;\n\
+        add_header Cache-Control "public, immutable";\n\
+    }\n\
+\n\
+    location / {\n\
+        try_files $uri $uri/ /index.html;\n\
+    }\n\
+}\n' > /etc/nginx/conf.d/default.conf
 
-ENV NODE_ENV=production
-ENV PORT=4173
-
-# Non-root user for security
-RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 webapp
-
-# Copy the standalone production bundle (package.json + node_modules)
-COPY --from=build --chown=webapp:nodejs /app/out ./
-
-# pnpm deploy may skip gitignored dirs — copy build output explicitly
-COPY --from=build --chown=webapp:nodejs /app/apps/web/build ./build
-
-USER webapp
+COPY --from=build /app/apps/web/build/client /usr/share/nginx/html
 
 EXPOSE 4173
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD node -e "fetch('http://localhost:4173').then(r=>{if(!r.ok)throw r.status})"
-
-CMD ["./node_modules/.bin/react-router-serve", "./build/server/index.js"]
+    CMD wget -q --spider http://localhost:4173/ || exit 1
