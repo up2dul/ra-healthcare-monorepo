@@ -38,6 +38,17 @@ RUN pnpm --filter server build
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm --filter server deploy --prod /app/out
 
+# ---- Migrate ----
+# Lightweight stage for running DB migrations before server starts
+# Usage: docker compose run --rm migrate
+FROM deps AS migrate
+
+COPY packages/db/ ./packages/db/
+COPY packages/env/ ./packages/env/
+COPY packages/config/ ./packages/config/
+
+CMD ["pnpm", "--filter", "@ra-healthcare/db", "db:migrate"]
+
 # ---- Runner ----
 FROM node:22-alpine AS runner
 

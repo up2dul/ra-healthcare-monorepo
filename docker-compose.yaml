@@ -14,6 +14,20 @@ services:
     networks:
       - app_network
 
+  migrate:
+    container_name: migrate
+    build:
+      context: .
+      dockerfile: ./apps/server/Dockerfile
+      target: migrate
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/postgres
+    depends_on:
+      - postgres
+    networks:
+      - app_network
+    restart: "no"
+
   server:
     container_name: server
     build:
@@ -27,7 +41,10 @@ services:
       CORS_ORIGIN: http://localhost:4173
       NODE_ENV: production
     depends_on:
-      - postgres
+      migrate:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_started
     networks:
       - app_network
 
