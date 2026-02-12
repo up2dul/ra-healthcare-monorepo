@@ -1,14 +1,20 @@
-import { Plus } from "lucide-react";
+import { format } from "date-fns";
+import { CalendarIcon, Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useQuery } from "urql";
 import { AppointmentsSkeleton } from "@/components/appointments/appointments-skeleton";
 import { DayAppointments } from "@/components/appointments/day-appointments";
 import type { AppointmentItem } from "@/components/appointments/types";
-import { ButtonLink } from "@/components/ui/button";
+import { Button, ButtonLink } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { appointmentsQuery } from "@/graphql/appointment";
-import { cn, getMonthDateRange, groupByDateKey, toDateKey } from "@/lib/utils";
+import { getMonthDateRange, groupByDateKey, toDateKey } from "@/lib/utils";
 import type { Route } from "./+types/appointments._index";
 
 export function meta({}: Route.MetaArgs) {
@@ -17,8 +23,9 @@ export function meta({}: Route.MetaArgs) {
 
 export default function AppointmentsPage() {
   const today = new Date();
-  const [month, setMonth] = useState(today);
   const [selectedDate, setSelectedDate] = useState<Date>(today);
+  const [month, setMonth] = useState(today);
+  const [open, setOpen] = useState(false);
 
   const { start, end } = getMonthDateRange(month);
 
@@ -36,17 +43,6 @@ export default function AppointmentsPage() {
   const appointmentsByDay = useMemo(
     () => groupByDateKey(appointments, (a) => a.startTime),
     [appointments],
-  );
-
-  const daysWithAppointments = useMemo(
-    () =>
-      new Set(
-        [...appointmentsByDay.keys()].map((key) => {
-          const [y, m, d] = key.split("-").map(Number);
-          return new Date(y, m - 1, d).toDateString();
-        }),
-      ),
-    [appointmentsByDay],
   );
 
   const selectedKey = toDateKey(selectedDate);
@@ -77,43 +73,46 @@ export default function AppointmentsPage() {
         </ButtonLink>
       </header>
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(280px,auto)_1fr]">
-        {/* Calendar panel */}
-        <Card>
-          <CardContent className="p-2">
-            <Calendar
-              mode="single"
-              selected={selectedDate}
-              onSelect={(date) => date && setSelectedDate(date)}
-              month={month}
-              onMonthChange={setMonth}
-              modifiers={{
-                hasAppointments: (date) =>
-                  daysWithAppointments.has(date.toDateString()),
-              }}
-              modifiersClassNames={{
-                hasAppointments: "has-appointments",
-              }}
-              classNames={{
-                day: cn(
-                  "group/day relative aspect-square h-full w-full select-none rounded-none p-0 text-center",
-                  "[&.has-appointments_.rdp-day_button]:after:absolute [&.has-appointments_.rdp-day_button]:after:bottom-1 [&.has-appointments_.rdp-day_button]:after:left-1/2 [&.has-appointments_.rdp-day_button]:after:size-1 [&.has-appointments_.rdp-day_button]:after:-translate-x-1/2 [&.has-appointments_.rdp-day_button]:after:rounded-full [&.has-appointments_.rdp-day_button]:after:bg-primary",
-                ),
-              }}
+      {/* Date picker */}
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger
+          render={
+            <Button
+              variant="outline"
+              className="h-8 w-full justify-start text-left font-normal sm:w-auto"
             />
-          </CardContent>
-        </Card>
+          }
+        >
+          <CalendarIcon className="size-3.5" />
+          {format(selectedDate, "LLL dd, y")}
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0" align="start">
+          <Calendar
+            mode="single"
+            selected={selectedDate}
+            onSelect={(date) => {
+              if (date) {
+                setSelectedDate(date);
+                setMonth(date);
+              }
+              setOpen(false);
+            }}
+            month={month}
+            onMonthChange={setMonth}
+            autoFocus
+          />
+        </PopoverContent>
+      </Popover>
 
-        {/* Day detail panel */}
-        <Card>
-          <CardContent className="p-4">
-            <DayAppointments
-              date={selectedDate}
-              appointments={selectedAppointments}
-            />
-          </CardContent>
-        </Card>
-      </div>
+      {/* Appointments for selected day */}
+      <Card>
+        <CardContent className="p-4">
+          <DayAppointments
+            date={selectedDate}
+            appointments={selectedAppointments}
+          />
+        </CardContent>
+      </Card>
     </div>
   );
 }
